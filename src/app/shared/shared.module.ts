@@ -6,8 +6,11 @@ import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+// pipes module
+import { PipesModule } from '../pipes/pipes.module';
+
 @NgModule({
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, PipesModule],
   declarations: [
     NopagefoundComponent,
     HeaderComponent,
