@@ -23,6 +23,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { ProfileComponent } from './profile/profile.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,13 @@ import { ProfileComponent } from './profile/profile.component';
     ProfileComponent
   ],
   exports: [DashboardComponent, ProgressComponent, Graficas1Component],
-  imports: [SharedModule, PAGES_ROUTES, FormsModule, ChartsModule, PipesModule]
+  imports: [
+    SharedModule,
+    PAGES_ROUTES,
+    FormsModule,
+    ChartsModule,
+    PipesModule,
+    CommonModule
+  ]
 })
 export class PagesModule {}
