@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/service.index';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-usuarios',
@@ -11,6 +12,7 @@ export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
   desde: number = 0;
   totalRegistros: number = 0;
+  cargando: boolean = true;
   constructor(public _usuarioService: UsuarioService) {}
 
   ngOnInit() {
@@ -18,9 +20,11 @@ export class UsuariosComponent implements OnInit {
   }
 
   cargarUsuarios() {
+    this.cargando = true;
     this._usuarioService.cargarUsuarios(this.desde).subscribe((resp: any) => {
       this.totalRegistros = resp.total;
       this.usuarios = resp.usuarios;
+      this.cargando = false;
     });
   }
 
@@ -37,5 +41,41 @@ export class UsuariosComponent implements OnInit {
 
     this.desde += valor;
     this.cargarUsuarios();
+  }
+
+  buscarUsuario(termino: string) {
+    if (termino.length <= 0) {
+      this.cargarUsuarios();
+      return;
+    }
+
+    this.cargando = true;
+    this._usuarioService
+      .buscarUsuarios(termino)
+      .subscribe((usuarios: Usuario[]) => {
+        this.usuarios = usuarios;
+        this.cargando = false;
+      });
+  }
+
+  borrarUsuario(usuario: Usuario) {
+    if (usuario._id === this._usuarioService.usuario._id) {
+      swal('Error borrando usuario', 'No se puede borrar a si mismo', 'error');
+      return;
+    }
+    swal({
+      title: '¿Está seguro?',
+      text: 'Está a punto de borrar a ' + usuario.nombre,
+      icon: 'warning',
+      buttons: ['Cancelar', 'Aceptar'],
+      dangerMode: true
+    }).then(borrar => {
+      if (borrar) {
+        this._usuarioService.borrarUsuario(usuario._id).subscribe(borrado => {
+          console.log(borrado);
+          this.cargarUsuarios();
+        });
+      }
+    });
   }
 }
