@@ -8,7 +8,6 @@ import { ModalUploadService } from './modal-upload.service';
   styles: []
 })
 export class ModalUploadComponent implements OnInit {
-  oculto: string = '';
   imagenSubir: File;
   imagenTemp: any;
   constructor(
@@ -20,7 +19,28 @@ export class ModalUploadComponent implements OnInit {
 
   ngOnInit() {}
 
-  subitImagen() {}
+  subirImagen() {
+    this._subirArchivo
+      .subirArchivo(
+        this.imagenSubir,
+        this._modalUploadService.tipo,
+        this._modalUploadService.id
+      )
+      .then(resp => {
+        this._modalUploadService.notificacion.emit(resp);
+        this.cerrarModal();
+      })
+      .catch(err => {
+        console.log('error en la carga');
+      });
+  }
+
+  cerrarModal() {
+    this.imagenTemp = null;
+    this.imagenSubir = null;
+    this._modalUploadService.ocultarModal();
+    (<HTMLInputElement>document.getElementById('imagen')).value = '';
+  }
 
   seleccionImagen(archivo: File) {
     if (!archivo) {
