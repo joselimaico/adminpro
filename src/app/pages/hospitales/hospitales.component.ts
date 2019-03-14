@@ -22,6 +22,7 @@ export class HospitalesComponent implements OnInit {
 
   ngOnInit() {
     this.cargarHospitales();
+
     this._modalUploadService.notificacion.subscribe(resp =>
       this.cargarHospitales()
     );
@@ -62,9 +63,9 @@ export class HospitalesComponent implements OnInit {
     this.cargando = true;
     this._hospitalService
       .cargarHospitales(this.desde)
-      .subscribe((resp: any) => {
-        this.totalRegistros = resp.total;
-        this.hospitales = resp.hospitales;
+      .subscribe(({ hospitales, total }: any) => {
+        this.totalRegistros = total;
+        this.hospitales = hospitales;
         this.cargando = false;
       });
   }

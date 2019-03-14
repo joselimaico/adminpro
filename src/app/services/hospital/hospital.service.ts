@@ -10,6 +10,7 @@ import { UsuarioService } from '../usuario/usuario.service';
   providedIn: 'root'
 })
 export class HospitalService {
+  // totalHospitales: number = 0;
   hospital: Hospital;
   constructor(
     public http: HttpClient,
@@ -17,9 +18,14 @@ export class HospitalService {
     public _usuarioService: UsuarioService
   ) {}
 
-  cargarHospitales(desde: number = 0) {
-    let url = URL_SERVICIOS + '/hospital?desde=' + desde;
-    return this.http.get(url);
+  cargarHospitales(desde: number = 0, limite: number = 5) {
+    let url = URL_SERVICIOS + '/hospital?desde=' + desde + '&limite=' + limite;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        // this.totalHospitales = resp.total;
+        return { hospitales: resp.hospitales, total: resp.total };
+      })
+    );
   }
 
   obtenerHospital(id: string) {
