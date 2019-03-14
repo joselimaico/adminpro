@@ -10,7 +10,8 @@ import {
   UsuarioService,
   HospitalService,
   LoginGuardGuard,
-  SubirArchivoService
+  SubirArchivoService,
+  MedicoService
 } from './service.index';
 
 @NgModule({
@@ -24,7 +25,8 @@ import {
     HospitalService,
     LoginGuardGuard,
     SubirArchivoService,
-    ModalUploadService
+    ModalUploadService,
+    MedicoService
   ]
 })
 export class ServiceModule {}

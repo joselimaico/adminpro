@@ -84,7 +84,6 @@ export class HospitalesComponent implements OnInit {
         this._hospitalService
           .borrarHospital(hospital._id)
           .subscribe(borrado => {
-            console.log(borrado);
             this.cargarHospitales();
           });
       }
