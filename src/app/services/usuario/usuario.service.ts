@@ -5,7 +5,6 @@ import { URL_SERVICIOS } from 'src/app/config/config';
 import { map } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { Router } from '@angular/router';
-import { routerNgProbeToken } from '@angular/router/src/router_module';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 
 @Injectable({
