@@ -11,6 +11,7 @@ import swal from 'sweetalert';
 })
 export class HospitalesComponent implements OnInit {
   hospitales: Hospital[] = [];
+  hospital: Hospital;
   desde: number = 0;
   totalRegistros: number = 0;
   cargando: boolean = true;
@@ -23,9 +24,10 @@ export class HospitalesComponent implements OnInit {
   ngOnInit() {
     this.cargarHospitales();
 
-    this._modalUploadService.notificacion.subscribe(resp =>
-      this.cargarHospitales()
-    );
+    this._modalUploadService.notificacion.subscribe(resp => {
+      console.log(resp);
+      this.cargarHospitales();
+    });
   }
 
   mostrarModal(id: string) {
