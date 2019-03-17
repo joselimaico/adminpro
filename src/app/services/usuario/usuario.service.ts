@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Usuario } from '../../models/usuario.model';
-import { HttpClient } from '@angular/common/http';
-import { URL_SERVICIOS } from 'src/app/config/config';
-import { map } from 'rxjs/operators';
-import swal from 'sweetalert';
-import { Router } from '@angular/router';
-import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { Injectable } from "@angular/core";
+import { Usuario } from "../../models/usuario.model";
+import { HttpClient } from "@angular/common/http";
+import { URL_SERVICIOS } from "src/app/config/config";
+import { map, catchError } from "rxjs/operators";
+import swal from "sweetalert";
+import { Router } from "@angular/router";
+import { SubirArchivoService } from "../subir-archivo/subir-archivo.service";
+import { throwError } from "rxjs/internal/observable/throwError";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class UsuarioService {
   usuario: Usuario;
@@ -27,8 +28,8 @@ export class UsuarioService {
   }
 
   cargarStorage() {
-    if (localStorage.getItem('token')) {
-      this.token = localStorage.getItem('token');
+    if (localStorage.getItem("token")) {
+      this.token = localStorage.getItem("token");
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
       this.menu = JSON.parse(localStorage.getItem('menu'));
     } else {
@@ -79,6 +80,10 @@ export class UsuarioService {
       map((resp: any) => {
         this.guardarStorage(resp.id, resp.token, resp.usuario, resp.menu);
         return true;
+      }),
+      catchError(err => {
+        swal('error al iniciar sesión', err.error.mensaje, 'error');
+        return throwError(err);
       })
     );
   }
@@ -88,6 +93,10 @@ export class UsuarioService {
       map((resp: any) => {
         swal('Usuario creado', usuario.email, 'success');
         return resp.usuario;
+      }),
+      catchError(err => {
+        swal(err.error.mensaje, err.error.errors.message, 'error');
+        return throwError(err);
       })
     );
   }
@@ -103,6 +112,10 @@ export class UsuarioService {
         }
         swal('Usuario actualizado', usuario.nombre, 'success');
         return true;
+      }),
+      catchError(err => {
+        swal(err.error.mensaje, err.error.errors.message, 'error');
+        return throwError(err);
       })
     );
   }
