@@ -15,11 +15,6 @@ import { MedicoComponent } from './medicos/medico.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 
 const pagesRoutes: Routes = [
-  {
-    path: '',
-    component: PagesComponent,
-    canActivate: [LoginGuardGuard],
-    children: [
       {
         path: 'dashboard',
         component: DashboardComponent,
@@ -79,8 +74,6 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Actualizar Médico' }
       },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
-    ]
-  }
 ];
 
 export const PAGES_ROUTES = RouterModule.forChild(pagesRoutes);

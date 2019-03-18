@@ -1,15 +1,15 @@
-import { Injectable } from "@angular/core";
-import { Usuario } from "../../models/usuario.model";
-import { HttpClient } from "@angular/common/http";
-import { URL_SERVICIOS } from "src/app/config/config";
-import { map, catchError } from "rxjs/operators";
-import swal from "sweetalert";
-import { Router } from "@angular/router";
-import { SubirArchivoService } from "../subir-archivo/subir-archivo.service";
-import { throwError } from "rxjs/internal/observable/throwError";
+import { Injectable } from '@angular/core';
+import { Usuario } from '../../models/usuario.model';
+import { HttpClient } from '@angular/common/http';
+import { URL_SERVICIOS } from 'src/app/config/config';
+import { map, catchError } from 'rxjs/operators';
+import swal from 'sweetalert';
+import { Router } from '@angular/router';
+import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class UsuarioService {
   usuario: Usuario;
@@ -23,13 +23,34 @@ export class UsuarioService {
     this.cargarStorage();
   }
 
+  renuevaToken() {
+    let url = URL_SERVICIOS + '/login/renuevatoken';
+    url += '?token=' + this.token;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        this.token = resp.token;
+        localStorage.setItem('token', this.token);
+        return true;
+      }),
+      catchError(err => {
+        this.logout();
+        swal(
+          'No se pudo renovar token',
+          'no fue posible renovar token',
+          'error'
+        );
+        return throwError(err);
+      })
+    );
+  }
+
   estaLogueado() {
     return this.token.length > 5 ? true : false;
   }
 
   cargarStorage() {
-    if (localStorage.getItem("token")) {
-      this.token = localStorage.getItem("token");
+    if (localStorage.getItem('token')) {
+      this.token = localStorage.getItem('token');
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
       this.menu = JSON.parse(localStorage.getItem('menu'));
     } else {
